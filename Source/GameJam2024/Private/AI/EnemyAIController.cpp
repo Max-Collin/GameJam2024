@@ -82,15 +82,21 @@ void AEnemyAIController::OnTargetPerceptionUpdate(AActor* SeenActor, FAIStimulus
 {
 	if(SeenActor)
 	{
-		if(Stimulus.Type == UAISense::GetSenseID<UAISense_Sight>())
+		if(Stimulus.Type == UAISense::GetSenseID<UAISense_Sight>()&&Stimulus.WasSuccessfullySensed())
 		{
 			
 			if(BlackboardComponent)
 			{
+				UE_LOG(LogTemp,Warning,TEXT("chasing %s"),*SeenActor->GetName())
 				BlackboardComponent->SetValueAsObject("Player",SeenActor);
 			
 			}
         		
+		}
+		else
+		{
+			UE_LOG(LogTemp,Warning,TEXT("Lost %s"),*SeenActor->GetName())
+			BlackboardComponent->SetValueAsObject("Player",nullptr);
 		}
 	}
 }

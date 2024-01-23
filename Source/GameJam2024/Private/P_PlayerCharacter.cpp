@@ -50,6 +50,7 @@ AP_PlayerCharacter::AP_PlayerCharacter()
 
 	// Create a follow camera
 	FollowCamera1 = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
+	
 	FollowCamera1->SetupAttachment(RootComponent); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera1->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
