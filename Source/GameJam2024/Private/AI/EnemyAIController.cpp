@@ -23,6 +23,13 @@ void AEnemyAIController::GetRandomLocation()
 	}
 }
 
+void AEnemyAIController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	
+		
+}
+
 AEnemyAIController::AEnemyAIController()
 {
 	BlackboardComponent = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
@@ -63,6 +70,17 @@ void AEnemyAIController::ChangeSpeed(bool Walking)
 	
 }
 
+void AEnemyAIController::LostSight()
+{
+	
+	
+}
+
+void AEnemyAIController::StartChase()
+{
+	Chasing = true;
+}
+
 void AEnemyAIController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -82,15 +100,26 @@ void AEnemyAIController::OnTargetPerceptionUpdate(AActor* SeenActor, FAIStimulus
 {
 	if(SeenActor)
 	{
-		if(Stimulus.Type == UAISense::GetSenseID<UAISense_Sight>())
+		if(Stimulus.Type == UAISense::GetSenseID<UAISense_Sight>()&&Stimulus.WasSuccessfullySensed())
 		{
 			
 			if(BlackboardComponent)
 			{
+			
 				BlackboardComponent->SetValueAsObject("Player",SeenActor);
+				StartChase();
 			
 			}
         		
 		}
+		else
+		{
+			
+			BlackboardComponent->SetValueAsObject("Player",nullptr);
+		}
+			
+		
 	}
+	
+	
 }

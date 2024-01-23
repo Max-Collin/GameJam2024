@@ -33,12 +33,15 @@ class GAMEJAM2024_API AEnemyAIController : public AAIController
     	TObjectPtr<class UAISenseConfig_Sight> Sight;
 	
 public:
-
+	
 	
 void GetRandomLocation();
-
+	virtual void Tick(float DeltaSeconds) override;
 	AEnemyAIController();
 	void ChangeSpeed(bool Walking);
+	void LostSight();
+	void StartChase();
+	bool Chasing=false;
 	
 
 protected:
@@ -47,6 +50,7 @@ protected:
 private:
 	UFUNCTION()
 	void OnTargetPerceptionUpdate(AActor* SeenActor,FAIStimulus Stimulus);
+	
 	bool IsWalking = true;
 
 	UPROPERTY(EditAnywhere)
