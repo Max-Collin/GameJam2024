@@ -38,6 +38,8 @@ public:
 void GetRandomLocation();
 
 	AEnemyAIController();
+	void ChangeSpeed(bool Walking);
+	
 
 protected:
 	virtual void BeginPlay() override;
@@ -45,4 +47,10 @@ protected:
 private:
 	UFUNCTION()
 	void OnTargetPerceptionUpdate(AActor* SeenActor,FAIStimulus Stimulus);
+	bool IsWalking = true;
+
+	UPROPERTY(EditAnywhere)
+	float WalkSpeed;
+	UPROPERTY(EditAnywhere)
+	float RunSpeed;
 };
