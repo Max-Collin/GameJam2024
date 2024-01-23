@@ -10,8 +10,9 @@
 /**
  * 
  */
- 
- 
+
+
+class ATargetPoint;
  class UAISenseConfig_Sight;
  class UAISenseConfig_Hearing;
  struct FAIStimulus;
@@ -34,7 +35,6 @@ class GAMEJAM2024_API AEnemyAIController : public AAIController
 	
 public:
 
-	
 void GetRandomLocation();
 
 	AEnemyAIController();

@@ -4,6 +4,9 @@
 #include "ItemSpawner.h"
 
 #include "DungeonSpawner.h"
+#include "Willie.h"
+#include "AI/EnemyAIController.h"
+#include "Engine/TargetPoint.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values for this component's properties
@@ -32,7 +35,9 @@ void UItemSpawner::BeginPlay()
 		SpawnLocationTiles = DungeonSpawner->GetFloorTiles();
 	}	
 	SpawnEndDoor();
+	SpawnPatrolPoints();
 	Spawn();
+	SpawnWillie();
 	// ...
 	
 }
@@ -83,6 +88,35 @@ void UItemSpawner::SpawnItems()
 
 }
 
+void UItemSpawner::SpawnWillie()
+{
+	if(Willie)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("Willie spawn"))
+		TMap<FIntVector,FIntVector>  Rooms = DungeonSpawner->GetRooms();
+		Rooms.Remove(FIntVector(0,0,0));
+		TArray<FIntVector>Spawnlocations;
+		Rooms.GenerateValueArray(Spawnlocations);
+	
+		int32 i =FMath::RandRange(0,Spawnlocations.Num()-1);
+		FVector Spawnlocationr = UKismetMathLibrary::Conv_IntVectorToVector(Spawnlocations[i]);
+		FVector TempVector = UKismetMathLibrary::Add_VectorVector(Spawnlocationr *Scale,DungeonSpawner->GetActorLocation());
+		FVector SpawnLocationVector = UKismetMathLibrary::Add_VectorVector(TempVector,FVector(200.f,200.f,200.f));
+		AWillie* ThisWillie =GetWorld()->SpawnActor<AWillie>(Willie,SpawnLocationVector,FRotator(0.f,0.f,0.f));
+
+		if(ThisWillie)
+		{
+			ThisWillie->PatrolPoints = PatrolLocations;
+		}
+		else
+		{
+			SpawnWillie();
+		}
+		
+	}
+
+}
+
 void UItemSpawner::SpawnEndDoor()
 {
 
@@ -93,6 +127,23 @@ void UItemSpawner::SpawnEndDoor()
 
 	GetWorld()->SpawnActor<AActor>(EndDoor,SpawnLocationVector,FRotator(0.f,0.f,0.f));
 	SpawnLocationTiles.RemoveAt(SpawnLocationTiles.Num()-1);
+}
+
+void UItemSpawner::SpawnPatrolPoints()
+{
+	TMap<FIntVector,FIntVector>  Rooms = DungeonSpawner->GetRooms();
+	for (auto Room : Rooms)
+	{
+			FIntVector  spawnLocation =(Room.Value - Room.Key) /2 + Room.Key;
+		UE_LOG(LogTemp,Warning,TEXT("%s"),*spawnLocation.ToString())
+		FVector FloorIndexVector = UKismetMathLibrary::Conv_IntVectorToVector(spawnLocation);
+		FVector TempVector = UKismetMathLibrary::Add_VectorVector(FloorIndexVector *Scale,DungeonSpawner->GetActorLocation());
+		FVector SpawnLocationVector = UKismetMathLibrary::Add_VectorVector(TempVector,offset);
+
+		PatrolLocations.Add(GetWorld()->SpawnActor<ATargetPoint>(Targetpoint,SpawnLocationVector,FRotator(0.f,0.f,0.f))); 
+
+		
+	}
 }
 
 

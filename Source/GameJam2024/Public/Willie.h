@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Engine/TargetPoint.h"
 #include "GameFramework/Character.h"
 #include "Willie.generated.h"
 
@@ -10,10 +12,16 @@ UCLASS()
 class GAMEJAM2024_API AWillie : public ACharacter
 {
 	GENERATED_BODY()
+	TObjectPtr<UBlackboardComponent> BlackboardComponent;
 
 public:
 	// Sets default values for this character's properties
 	AWillie();
+	UPROPERTY(VisibleAnywhere)
+	TArray<ATargetPoint*> PatrolPoints;
+	void NewPatrolTarget();
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<ATargetPoint> CurrentPatrolTarget;
 
 protected:
 	// Called when the game starts or when spawned

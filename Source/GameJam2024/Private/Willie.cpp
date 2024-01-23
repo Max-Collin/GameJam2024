@@ -2,6 +2,8 @@
 
 
 #include "Willie.h"
+#include "Engine/TargetPoint.h"
+#include "AI/EnemyAIController.h"
 
 // Sets default values
 AWillie::AWillie()
@@ -15,6 +17,8 @@ AWillie::AWillie()
 void AWillie::BeginPlay()
 {
 	Super::BeginPlay();
+	BlackboardComponent = Cast<AEnemyAIController>(GetController())->GetBlackboardComponent();
+	
 	
 }
 
@@ -30,5 +34,22 @@ void AWillie::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+void AWillie::NewPatrolTarget()
+{
+	UE_LOG(LogTemp,Warning,TEXT("new Patrol Target"))
+	TArray<ATargetPoint*> PatrolPointsTemp= PatrolPoints;
+	//PatrolPointsTemp.RemoveAt(PatrolPointsTemp.Find(CurrentPatrolTarget));
+	ATargetPoint* NewPatrolPoint = PatrolPointsTemp[FMath::RandRange(0,PatrolPoints.Num()-1)];
+
+
+
+	if(BlackboardComponent)
+	{
+		BlackboardComponent->SetValueAsVector("PatrolPoint",NewPatrolPoint->GetActorLocation());
+		CurrentPatrolTarget = NewPatrolPoint;
+	}
+
+	
 }
 

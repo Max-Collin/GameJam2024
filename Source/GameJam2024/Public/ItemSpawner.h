@@ -7,7 +7,8 @@
 #include "ItemSpawner.generated.h"
 
 
-class ADungeonSpawner;
+class AWillie;
+class ATargetPoint;class ADungeonSpawner;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GAMEJAM2024_API UItemSpawner : public UActorComponent
@@ -37,11 +38,17 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> EndDoor;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ATargetPoint> Targetpoint;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AWillie> Willie;
 
 private:
 	void Spawn();
 	void SpawnItems();
+	void SpawnWillie();
 	void SpawnEndDoor();
+	void SpawnPatrolPoints();
 
 	float Scale;
 	FRandomStream Stream;
@@ -50,6 +57,8 @@ private:
 	TArray<FIntVector> SpawnLocationTiles;
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<ADungeonSpawner> DungeonSpawner;
+	UPROPERTY(VisibleAnywhere)
+	TArray<ATargetPoint*> PatrolLocations;
 	
 	
 

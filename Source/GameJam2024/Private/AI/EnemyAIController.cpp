@@ -11,6 +11,7 @@
 #include "Perception/AISenseConfig.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Willie.h"
+
 #include "GameFramework/CharacterMovementComponent.h"
 
 void AEnemyAIController::GetRandomLocation()
@@ -51,7 +52,7 @@ void AEnemyAIController::ChangeSpeed(bool Walking)
 	AWillie* Willie = Cast<AWillie>(GetCharacter());
 	if(Walking)
 	{
-		
+	
 		Willie->GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
 		
 	}
@@ -62,6 +63,8 @@ void AEnemyAIController::ChangeSpeed(bool Walking)
 	}
 	
 }
+
+
 
 void AEnemyAIController::BeginPlay()
 {
