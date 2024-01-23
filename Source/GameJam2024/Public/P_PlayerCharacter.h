@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Character.h"
+
 #include "Logging/LogMacros.h"
 #include "P_PlayerCharacter.generated.h"
 
@@ -16,7 +17,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class GAMEJAM2024_API AP_PlayerCharacter : public APawn
+class GAMEJAM2024_API AP_PlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -69,8 +70,8 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+
 	
 
 };

@@ -60,6 +60,14 @@ void AP_PlayerCharacter::BeginPlay()
 	
 }
 
+void AP_PlayerCharacter::Move(const FInputActionValue& Value)
+{
+}
+
+void AP_PlayerCharacter::Look(const FInputActionValue& Value)
+{
+}
+
 // Called every frame
 void AP_PlayerCharacter::Tick(float DeltaTime)
 {
