@@ -2,6 +2,7 @@
 
 
 #include "BaseItem.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 ABaseItem::ABaseItem()
@@ -9,6 +10,11 @@ ABaseItem::ABaseItem()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Item Mesh"));
+	//RootComponent = ItemMesh;
+	
+	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
+	//CollisionSphere->AddToRoot();
 }
 
 // Called when the game starts or when spawned

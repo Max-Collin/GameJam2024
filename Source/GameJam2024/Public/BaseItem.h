@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BaseItem.generated.h"
 
+class USphereComponent;
+
 UCLASS()
 class GAMEJAM2024_API ABaseItem : public AActor
 {
@@ -14,6 +16,15 @@ class GAMEJAM2024_API ABaseItem : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ABaseItem();
+
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* ItemMesh;
+
+	UPROPERTY(EditAnywhere)
+	FString ItemName;
+
+	UPROPERTY(EditAnywhere)
+	USphereComponent* CollisionSphere;
 
 protected:
 	// Called when the game starts or when spawned
