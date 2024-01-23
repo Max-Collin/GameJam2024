@@ -113,14 +113,17 @@ void AP_PlayerCharacter::Look(const FInputActionValue& Value)
 
 void AP_PlayerCharacter::Mouse1(const FInputActionValue& Value)
 {
+	
 	if(LightSwitch)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Off"));
 		LightSwitch = false;
-		LightSource1->Intensity = 0;
+		LightSource1->SetVisibility(false);
 	}else
 	{
+		UE_LOG(LogTemp, Warning, TEXT("On"));
 		LightSwitch = true;
-		LightSource1->Intensity = 1000;
+		LightSource1->SetVisibility(true);
 	}
 	
 }
@@ -149,6 +152,9 @@ void AP_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AP_PlayerCharacter::Look);
+
+		//Mouse 1ing
+		EnhancedInputComponent->BindAction(Mouse1Action, ETriggerEvent::Triggered, this, &AP_PlayerCharacter::Mouse1);
 	}
 	else
 	{

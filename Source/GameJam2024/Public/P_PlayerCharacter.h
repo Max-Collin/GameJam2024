@@ -84,6 +84,6 @@ protected:
 	/** Called for Mouse1 input */
 	void Mouse1(const FInputActionValue& Value);
 
-	bool LightSwitch = false;
+	bool LightSwitch = true;
 
 };
