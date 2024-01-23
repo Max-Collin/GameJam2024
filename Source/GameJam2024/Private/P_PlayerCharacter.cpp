@@ -11,10 +11,13 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Components/PointLightComponent.h"
+#include "Components/SpotLightComponent.h"
 
 // Sets default values
 AP_PlayerCharacter::AP_PlayerCharacter()
 {
+	SetRootComponent(GetCapsuleComponent());
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -46,11 +49,15 @@ AP_PlayerCharacter::AP_PlayerCharacter()
 	//CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 	// Create a follow camera
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	//FollowCamera->SetupAttachment(CapsuleComponent); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	FollowCamera1 = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
+	FollowCamera1->SetupAttachment(RootComponent); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	FollowCamera1->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-
+	LightSource1 = CreateDefaultSubobject<USpotLightComponent>(TEXT("Light Source"));
+	LightSource1->SetupAttachment(FollowCamera1);
+	FlashLightMesh1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Flash Light Mesh"));
+	FlashLightMesh1->SetupAttachment(FollowCamera1);
+	
 }
 
 // Called when the game starts or when spawned
@@ -102,6 +109,20 @@ void AP_PlayerCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AP_PlayerCharacter::Mouse1(const FInputActionValue& Value)
+{
+	if(LightSwitch)
+	{
+		LightSwitch = false;
+		LightSource1->Intensity = 0;
+	}else
+	{
+		LightSwitch = true;
+		LightSource1->Intensity = 1000;
+	}
+	
 }
 
 // Called every frame

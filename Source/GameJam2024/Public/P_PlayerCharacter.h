@@ -8,6 +8,8 @@
 #include "Logging/LogMacros.h"
 #include "P_PlayerCharacter.generated.h"
 
+class USpotLightComponent;
+class UPointLightComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -27,7 +29,7 @@ class GAMEJAM2024_API AP_PlayerCharacter : public ACharacter
 
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FollowCamera;
+	UCameraComponent* FollowCamera1;
 	
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -41,9 +43,18 @@ class GAMEJAM2024_API AP_PlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* Mouse1Action;
+
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
+
+	UPROPERTY(EditAnywhere)
+	USpotLightComponent* LightSource1;
+
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* FlashLightMesh1;
 
 public:
 	// Sets default values for this pawn's properties
@@ -58,7 +69,7 @@ public:
 	/** Returns CameraBoom subobject **/
 	//FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera1; }
 	
 protected:
 	// Called when the game starts or when spawned
@@ -70,8 +81,9 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	
+	/** Called for Mouse1 input */
+	void Mouse1(const FInputActionValue& Value);
 
-	
+	bool LightSwitch = false;
 
 };
