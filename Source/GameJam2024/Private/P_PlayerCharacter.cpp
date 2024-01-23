@@ -2,6 +2,8 @@
 
 
 #include "P_PlayerCharacter.h"
+
+#include "BaseItem.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -58,13 +60,17 @@ AP_PlayerCharacter::AP_PlayerCharacter()
 	LightSource1->SetupAttachment(FollowCamera1);
 	FlashLightMesh1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Flash Light Mesh"));
 	FlashLightMesh1->SetupAttachment(FollowCamera1);
-	
+
+	Collision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("COllision Capsule to Use"));
+	Collision->SetupAttachment(FollowCamera1);
 }
 
 // Called when the game starts or when spawned
 void AP_PlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	Collision->OnComponentBeginOverlap.AddDynamic(this, &AP_PlayerCharacter::OnOverlap);
 	
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -129,6 +135,27 @@ void AP_PlayerCharacter::Mouse1(const FInputActionValue& Value)
 	
 }
 
+void AP_PlayerCharacter::Interact(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Interact"));
+	Interacting = Value.Get<bool>();
+}
+
+void AP_PlayerCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Overlap"));
+	ABaseItem* ItemToPickup = Cast<ABaseItem>(OtherActor);
+	if(ItemToPickup)
+	{
+		if(Interacting)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Destroy"));
+			ItemToPickup->SelfDestruct();
+		}
+	}
+}
+
 // Called every frame
 void AP_PlayerCharacter::Tick(float DeltaTime)
 {
@@ -156,6 +183,9 @@ void AP_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//Mouse 1ing
 		EnhancedInputComponent->BindAction(Mouse1Action, ETriggerEvent::Triggered, this, &AP_PlayerCharacter::Mouse1);
+
+		//Eing
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AP_PlayerCharacter::Interact);
 	}
 	else
 	{

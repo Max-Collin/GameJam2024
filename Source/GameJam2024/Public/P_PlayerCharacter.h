@@ -39,12 +39,18 @@ class GAMEJAM2024_API AP_PlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* JumpAction;
 
+	UPROPERTY(EditAnywhere)
+	UCapsuleComponent* Collision;
+
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* Mouse1Action;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractAction;
 
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -83,7 +89,15 @@ protected:
 
 	/** Called for Mouse1 input */
 	void Mouse1(const FInputActionValue& Value);
+	
+	void Interact(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	               int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult);
 
 	bool LightSwitch = true;
+	bool Interacting = true;
+	bool inRangeToPickup = false;
 
 };

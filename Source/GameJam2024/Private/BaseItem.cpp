@@ -2,6 +2,9 @@
 
 
 #include "BaseItem.h"
+
+#include "P_PlayerCharacter.h"
+#include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 
 // Sets default values
@@ -11,23 +14,30 @@ ABaseItem::ABaseItem()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Item Mesh"));
-	//RootComponent = ItemMesh;
+	RootComponent = ItemMesh;
 	
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
-	//CollisionSphere->AddToRoot();
+	CollisionSphere->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void ABaseItem::BeginPlay()
 {
 	Super::BeginPlay();
+
 	
 }
+
 
 // Called every frame
 void ABaseItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ABaseItem::SelfDestruct()
+{
+	this->Destroy();
 }
 
