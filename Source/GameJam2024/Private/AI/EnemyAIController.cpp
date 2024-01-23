@@ -10,6 +10,8 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Willie.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 void AEnemyAIController::GetRandomLocation()
 {
@@ -42,6 +44,23 @@ AEnemyAIController::AEnemyAIController()
 	
 	AAIController::GetPerceptionComponent()->SetDominantSense(*Sight->GetSenseImplementation());
 	AAIController::GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this,&AEnemyAIController::OnTargetPerceptionUpdate);
+}
+
+void AEnemyAIController::ChangeSpeed(bool Walking)
+{
+	AWillie* Willie = Cast<AWillie>(GetCharacter());
+	if(Walking)
+	{
+		
+		Willie->GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+		
+	}
+	else
+	{
+		
+		Willie->GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	}
+	
 }
 
 void AEnemyAIController::BeginPlay()
