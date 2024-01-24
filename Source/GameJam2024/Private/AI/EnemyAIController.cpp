@@ -100,6 +100,9 @@ void AEnemyAIController::OnTargetPerceptionUpdate(AActor* SeenActor, FAIStimulus
 		{
 			UE_LOG(LogTemp,Warning,TEXT("Lost %s"),*SeenActor->GetName())
 			BlackboardComponent->SetValueAsObject("Player",nullptr);
+			BlackboardComponent->SetValueAsVector("LastKnowLocation" ,Stimulus.StimulusLocation);
+			
+			UE_LOG(LogTemp,Warning,TEXT("Checking Last location %s"),*Stimulus.StimulusLocation.ToString())
 		}
 	}
 }

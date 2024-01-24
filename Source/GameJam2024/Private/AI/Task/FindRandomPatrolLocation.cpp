@@ -19,7 +19,7 @@ EBTNodeResult::Type UFindRandomPatrolLocation::ExecuteTask(UBehaviorTreeComponen
 		UNavigationSystemV1* NavigationSystemV1 = UNavigationSystemV1::GetCurrent(GetWorld());
 		FNavLocation NavLocation;
 
-		if(NavigationSystemV1->GetRandomReachablePointInRadius(Willie->GetActorLocation(),10000.f,NavLocation))
+		if(NavigationSystemV1->GetRandomReachablePointInRadius(Willie->GetActorLocation(),2000.f,NavLocation))
 		{
 			EnemyAIController->GetBlackboardComponent()->SetValueAsVector("RandomLocation",NavLocation.Location);
 
