@@ -63,7 +63,7 @@ AP_PlayerCharacter::AP_PlayerCharacter()
 	FlashLightMesh1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Flash Light Mesh"));
 	FlashLightMesh1->SetupAttachment(FollowCamera1);
 
-	Collision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("COllision Capsule to Use"));
+	Collision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Collision Capsule to Use"));
 	Collision->SetupAttachment(FollowCamera1);
 
 		ThrowStartLocation = CreateDefaultSubobject<UChildActorComponent>(TEXT("ThrowStartLocation"));

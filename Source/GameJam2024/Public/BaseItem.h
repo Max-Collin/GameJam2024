@@ -31,6 +31,8 @@ public:
 	bool isPickup;
 
 	UFUNCTION()
+	virtual void Interact();
+	
 	void SelfDestruct();
 	
 protected:

@@ -20,12 +20,15 @@ ABaseItem::ABaseItem()
 	CollisionSphere->SetupAttachment(RootComponent);
 }
 
+void ABaseItem::Interact()
+{
+	SelfDestruct();
+}
+
 // Called when the game starts or when spawned
 void ABaseItem::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 }
 
 
