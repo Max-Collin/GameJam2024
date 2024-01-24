@@ -15,6 +15,8 @@
 #include "InputActionValue.h"
 #include "Components/PointLightComponent.h"
 #include "Components/SpotLightComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AP_PlayerCharacter::AP_PlayerCharacter()
@@ -63,6 +65,9 @@ AP_PlayerCharacter::AP_PlayerCharacter()
 
 	Collision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("COllision Capsule to Use"));
 	Collision->SetupAttachment(FollowCamera1);
+
+		ThrowStartLocation = CreateDefaultSubobject<UChildActorComponent>(TEXT("ThrowStartLocation"));
+    	ThrowStartLocation->SetupAttachment(FollowCamera1);
 }
 
 // Called when the game starts or when spawned
@@ -141,8 +146,67 @@ void AP_PlayerCharacter::Interact(const FInputActionValue& Value)
 	Interacting = Value.Get<bool>();
 }
 
+void AP_PlayerCharacter::Aim()
+{
+
+	//if(!EquippedThrowable)return;
+	FPredictProjectilePathParams ProjectilePathParams;
+	FPredictProjectilePathResult ProjectilePathResult;
+
+
+	ProjectilePathParams.StartLocation = ThrowStartLocation->GetComponentLocation()	;
+	
+	float PlayerPitch ;
+	FVector LaunchVelocity;
+	if(GetControlRotation().Pitch>=270)
+	{
+		PlayerPitch = (GetControlRotation().Pitch-270)/110;
+	}
+	else
+	{
+		PlayerPitch = (GetControlRotation().Pitch+90)/110;
+	}
+
+	
+	PlayerPitch = FMath::Clamp(PlayerPitch,0.1,1.2);
+	FVector UnitDirection =UKismetMathLibrary::GetDirectionUnitVector(GetActorLocation(),ThrowStartLocation->GetComponentLocation());
+	//FVector ForwardVector = GetCapsuleComponent()->GetForwardVector();
+	LaunchVelocity = UnitDirection* ThrowSpeed ;
+	
+	// 2x-x^3
+	float PitchvelocityX =  PlayerPitch*2-FMath::Cube(PlayerPitch);
+	
+	LaunchVelocity = FVector(LaunchVelocity.X*PitchvelocityX,LaunchVelocity.Y*PitchvelocityX,FMath::Clamp(FMath::Pow(LaunchVelocity.Z,PlayerPitch),0,800));
+	
+	
+	ProjectilePathParams.LaunchVelocity = LaunchVelocity;
+	ProjectilePathParams.SimFrequency = 30;
+	ProjectilePathParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
+	ProjectilePathParams.bTraceWithCollision =true;
+	
+	UGameplayStatics::PredictProjectilePath(this,ProjectilePathParams,ProjectilePathResult);
+	UE_LOG(LogTemp,Warning,TEXT("Aim"));
+
+	
+	FString String = FString::Printf(TEXT("%f"),GetControlRotation().Pitch);
+	FString String2 = FString::Printf(TEXT("%f"),PlayerPitch);
+	FString String3 = FString::Printf(TEXT("%f"),FMath::Pow(LaunchVelocity.Z,PlayerPitch));
+	FString String4 = FString::Printf(TEXT("%s"),*LaunchVelocity.ToString());
+	
+	
+	if(GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(1,0.1f,FColor::Red,String);
+		GEngine->AddOnScreenDebugMessage(2,0.1f,FColor::Blue,String2);
+		GEngine->AddOnScreenDebugMessage(3,0.1f,FColor::Green,String3);
+		GEngine->AddOnScreenDebugMessage(4,0.1f,FColor::Green,String4);
+	}
+
+	//FVector(ForwardVector.X,ForwardVector.Y,ForwardVector.Z=50)
+}
+
 void AP_PlayerCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult)
+                                   int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Overlap"));
 	ABaseItem* ItemToPickup = Cast<ABaseItem>(OtherActor);
@@ -186,6 +250,8 @@ void AP_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		//Eing
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AP_PlayerCharacter::Interact);
+
+		EnhancedInputComponent->BindAction(AimAction,ETriggerEvent::Triggered,this,&AP_PlayerCharacter::Aim);
 	}
 	else
 	{

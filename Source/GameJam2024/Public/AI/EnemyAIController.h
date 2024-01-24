@@ -32,6 +32,7 @@ class GAMEJAM2024_API AEnemyAIController : public AAIController
     	TObjectPtr<class UAIPerceptionComponent> UaiPerceptionComponent;
     	
     	TObjectPtr<class UAISenseConfig_Sight> Sight;
+		TObjectPtr<UAISenseConfig_Hearing> Hear;
 	
 public:
 

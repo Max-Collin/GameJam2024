@@ -13,6 +13,7 @@
 #include "Willie.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Perception/AISenseConfig_Hearing.h"
 
 void AEnemyAIController::GetRandomLocation()
 {
@@ -41,7 +42,14 @@ AEnemyAIController::AEnemyAIController()
 	Sight->DetectionByAffiliation.bDetectNeutrals=true;
 	Sight->DetectionByAffiliation.bDetectFriendlies=true;
 
+	Hear = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("Hearing Config"));
+	Hear->HearingRange=1000.f;
+	Hear->DetectionByAffiliation.bDetectEnemies=true;
+	Hear->DetectionByAffiliation.bDetectNeutrals=true;
+	Hear->DetectionByAffiliation.bDetectFriendlies=true;
+
 	AAIController::GetPerceptionComponent()->ConfigureSense(*Sight);
+	AAIController::GetPerceptionComponent()->ConfigureSense(*Hear);
 	
 	AAIController::GetPerceptionComponent()->SetDominantSense(*Sight->GetSenseImplementation());
 	AAIController::GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this,&AEnemyAIController::OnTargetPerceptionUpdate);
@@ -103,6 +111,14 @@ void AEnemyAIController::OnTargetPerceptionUpdate(AActor* SeenActor, FAIStimulus
 			BlackboardComponent->SetValueAsVector("LastKnowLocation" ,Stimulus.StimulusLocation);
 			
 			UE_LOG(LogTemp,Warning,TEXT("Checking Last location %s"),*Stimulus.StimulusLocation.ToString())
+		}
+		if(Stimulus.Type == UAISense::GetSenseID<UAISense_Hearing>())
+		{
+			if(BlackboardComponent)
+			{
+				BlackboardComponent->SetValueAsVector("InvestigationTarget",Stimulus.StimulusLocation);
+				
+			}
 		}
 	}
 }

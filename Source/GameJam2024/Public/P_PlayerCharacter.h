@@ -15,6 +15,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class UChildActorComponent;
 
 //CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -56,6 +57,9 @@ class GAMEJAM2024_API AP_PlayerCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere,Category = Input)
+	TObjectPtr<UInputAction> AimAction;
+
 	UPROPERTY(EditAnywhere)
 	USpotLightComponent* LightSource1;
 
@@ -92,6 +96,10 @@ protected:
 	
 	void Interact(const FInputActionValue& Value);
 
+	
+
+	void Aim();
+
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	               int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult);
@@ -99,5 +107,12 @@ protected:
 	bool LightSwitch = true;
 	bool Interacting = true;
 	bool inRangeToPickup = false;
+	
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UChildActorComponent> ThrowStartLocation;
+	UPROPERTY(EditAnywhere)
+	float ThrowSpeed=400;
+private:
+	
 
 };
