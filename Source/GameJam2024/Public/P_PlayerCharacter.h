@@ -69,7 +69,9 @@ class GAMEJAM2024_API AP_PlayerCharacter : public ACharacter
 	UStaticMeshComponent* FlashLightMesh1;
 	
 	UPROPERTY(EditAnywhere)
-	ABaseItem* ItemToPickup;
+	ABaseItem* ItemToPickup1;
+
+	
 	
 public:
 	// Sets default values for this pawn's properties
@@ -87,6 +89,9 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera1; }
 
 	TObjectPtr<AThrowableItem> EquippedThrowable;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowInteractMessage();
 	
 protected:
 	// Called when the game starts or when spawned
@@ -109,14 +114,13 @@ protected:
 	void Throw();
 
 	UFUNCTION()
-	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	               int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult);
+	void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
 	UFUNCTION()
 	void OverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	bool LightSwitch = true;
-	bool Interacting = true;
+	bool Interacting = false;
 	bool inRangeToPickup = false;
 	
 	UPROPERTY(EditAnywhere)

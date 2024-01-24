@@ -19,6 +19,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "ThrowableItem.h"
 
+
+
 // Sets default values
 AP_PlayerCharacter::AP_PlayerCharacter()
 {
@@ -76,9 +78,9 @@ void AP_PlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Collision->OnComponentBeginOverlap.AddDynamic(this, &AP_PlayerCharacter::OnOverlap);
+	Collision->OnComponentBeginOverlap.AddDynamic(this, &AP_PlayerCharacter::OverlapBegin);
 	Collision->OnComponentEndOverlap.AddDynamic(this, &AP_PlayerCharacter::OverlapEnd);
-	Collision->SetCapsuleRadius(false);
+
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -243,43 +245,37 @@ void AP_PlayerCharacter::Throw()
 	
 }
 
-void AP_PlayerCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+void AP_PlayerCharacter::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                                    int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Overlap"));
-	ItemToPickup = Cast<ABaseItem>(OtherActor);
-	if(ItemToPickup)
-	{
-		Interacting = true;
-	}
-	UE_LOG(LogTemp, Warning, TEXT("Interact?: %s"), ( Interacting ? TEXT("true"): TEXT("false") ));
+	
 }
 
 void AP_PlayerCharacter::OverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Overlap Leave"));
-	ItemToPickup = Cast<ABaseItem>(OtherActor);
-	if(ItemToPickup)
-	{
-		Interacting = false;
-	}
-	UE_LOG(LogTemp, Warning, TEXT("Interact?: %s"), ( Interacting ? TEXT("true"): TEXT("false") ));
+	
 }
 
 void AP_PlayerCharacter::Interact(const FInputActionValue& Value)
 {
-	Interacting = Value.Get<bool>();
-	
-	
 	if (Controller != nullptr)
 	{
-		if(Interacting)
+		FHitResult HitResult;
+
+		const float WeaponRange = 20000.f;
+		const FVector StartTrace =FollowCamera1->GetComponentLocation();
+		const FVector EndTrace =(UKismetMathLibrary::GetForwardVector(FollowCamera1->GetComponentRotation()) * WeaponRange) + StartTrace;
+
+
+		//FCollisionQueryParams QueryParams = FCollisionQueryParams(SCENE_QUERY_STAT(WeaponTrace,false,this));
+
+		bool bHitSomething = GetWorld()->LineTraceSingleByChannel(HitResult,StartTrace,EndTrace,ECC_Visibility);
+		if(bHitSomething)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Destroy"));
-			if(ItemToPickup)
+			if(ABaseItem* HitableActor = Cast<ABaseItem>(HitResult.GetActor()))
 			{
-				ItemToPickup->Interact(this);
+				HitableActor->Interact(this);
 			}
 		}
 	}
