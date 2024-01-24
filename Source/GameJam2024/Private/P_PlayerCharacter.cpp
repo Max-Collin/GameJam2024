@@ -77,7 +77,8 @@ void AP_PlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	Collision->OnComponentBeginOverlap.AddDynamic(this, &AP_PlayerCharacter::OnOverlap);
-	
+	Collision->OnComponentEndOverlap.AddDynamic(this, &AP_PlayerCharacter::OverlapEnd);
+	Collision->SetCapsuleRadius(false);
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -141,11 +142,7 @@ void AP_PlayerCharacter::Mouse1(const FInputActionValue& Value)
 	
 }
 
-void AP_PlayerCharacter::Interact(const FInputActionValue& Value)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Interact"));
-	Interacting = Value.Get<bool>();
-}
+
 
 void AP_PlayerCharacter::Aim()
 {
@@ -242,9 +239,6 @@ void AP_PlayerCharacter::Throw()
 		EquippedThrowable = nullptr;
 	
 	
-
-
-	
 	
 	
 }
@@ -253,13 +247,40 @@ void AP_PlayerCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
                                    int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Overlap"));
-	ABaseItem* ItemToPickup = Cast<ABaseItem>(OtherActor);
+	ItemToPickup = Cast<ABaseItem>(OtherActor);
 	if(ItemToPickup)
+	{
+		Interacting = true;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Interact?: %s"), ( Interacting ? TEXT("true"): TEXT("false") ));
+}
+
+void AP_PlayerCharacter::OverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Overlap Leave"));
+	ItemToPickup = Cast<ABaseItem>(OtherActor);
+	if(ItemToPickup)
+	{
+		Interacting = false;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Interact?: %s"), ( Interacting ? TEXT("true"): TEXT("false") ));
+}
+
+void AP_PlayerCharacter::Interact(const FInputActionValue& Value)
+{
+	Interacting = Value.Get<bool>();
+	
+	
+	if (Controller != nullptr)
 	{
 		if(Interacting)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Destroy"));
-			ItemToPickup->Interact(this);
+			if(ItemToPickup)
+			{
+				ItemToPickup->Interact(this);
+			}
 		}
 	}
 }
