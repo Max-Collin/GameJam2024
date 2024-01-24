@@ -17,6 +17,7 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 class UChildActorComponent;
+class ABaseItem;
 
 //CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -66,7 +67,10 @@ class GAMEJAM2024_API AP_PlayerCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* FlashLightMesh1;
-
+	
+	UPROPERTY(EditAnywhere)
+	ABaseItem* ItemToPickup;
+	
 public:
 	// Sets default values for this pawn's properties
 	AP_PlayerCharacter();
@@ -107,6 +111,9 @@ protected:
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	               int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	bool LightSwitch = true;
 	bool Interacting = true;
