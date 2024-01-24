@@ -185,7 +185,7 @@ void AP_PlayerCharacter::Aim()
 	ProjectilePathParams.bTraceWithCollision =true;
 	
 	UGameplayStatics::PredictProjectilePath(this,ProjectilePathParams,ProjectilePathResult);
-	UE_LOG(LogTemp,Warning,TEXT("Aim"));
+	//UE_LOG(LogTemp,Warning,TEXT("Aim"));
 
 	
 	FString String = FString::Printf(TEXT("%f"),GetControlRotation().Pitch);
