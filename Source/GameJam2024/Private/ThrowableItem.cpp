@@ -16,12 +16,39 @@ AThrowableItem::AThrowableItem()
 	AIPerceptionStimuliSourceComponent->RegisterForSense(UAISense_Hearing::StaticClass());
 }
 
+void AThrowableItem::DetachMeshFromSocket()
+{
+
+FDetachmentTransformRules TransformRules(EDetachmentRule::KeepWorld,true);
+	ItemMesh->DetachFromComponent(TransformRules);
+}
+
+void AThrowableItem::Equip(USceneComponent* InParent, FName InSocketName)
+{
+	ItemMesh->SetSimulatePhysics(false);
+	AttachMeshToSocket(InParent, InSocketName);
+	ItemMesh->SetEnableGravity(false);
+	ItemMesh->SetAllPhysicsLinearVelocity(FVector::ZeroVector);
+	ItemMesh->SetAllPhysicsAngularVelocityInDegrees(FVector::ZeroVector);
+
+	ItemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	
+}
+
+void AThrowableItem::BeginPlay()
+{
+	Super::BeginPlay();
+	ItemMesh->OnComponentHit.AddDynamic(this,&AThrowableItem::OnSphereHit);
+}
+
 void AThrowableItem::OnSphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                                  FVector NormalImpulse, const FHitResult& Hit)
 {
 	
 	if(DoOnce_Hit&&GetVelocity().Length()>3)
 	{
+		UE_LOG(LogTemp,Warning,TEXT("Hit"))
 		UAISense_Hearing::ReportNoiseEvent(this,Hit.Location,100,this,-1);
 		DoOnce_Hit = false;
 		//UE_LOG(LogTemp, Warning, TEXT("OnSphereHit called. HitComponent: %s"), *OtherActor->GetName());
@@ -47,5 +74,12 @@ void AThrowableItem::ResetDoOnce()
 {
 	DoOnce_Hit =true;
 	UE_LOG(LogTemp,Warning,TEXT("Reset"))
+}
+
+void AThrowableItem::AttachMeshToSocket(TObjectPtr<USceneComponent> InParent, FName InSocketName)
+{
+	FAttachmentTransformRules TransformRules(EAttachmentRule::SnapToTarget,true);
+	ItemMesh->AttachToComponent(InParent,TransformRules,InSocketName);
+	
 }
 
