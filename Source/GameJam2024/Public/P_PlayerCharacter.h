@@ -115,7 +115,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UChildActorComponent> ThrowStartLocation;
 	UPROPERTY(EditAnywhere)
-	float ThrowSpeed=400;
+	float ThrowSpeed=800;
 private:
 	
 

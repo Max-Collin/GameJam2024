@@ -41,6 +41,10 @@ void ABaseItem::Tick(float DeltaTime)
 
 void ABaseItem::SelfDestruct()
 {
-	this->Destroy();
+	if(isPickup)
+	{
+		this->Destroy();
+	}
+	
 }
 
