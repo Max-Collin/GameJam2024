@@ -31,7 +31,7 @@ public:
 	bool isPickup;
 
 	UFUNCTION()
-	virtual void Interact();
+	virtual void Interact(AActor* InteractingActor);
 	
 	void SelfDestruct();
 	

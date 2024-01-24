@@ -20,7 +20,7 @@ ABaseItem::ABaseItem()
 	CollisionSphere->SetupAttachment(RootComponent);
 }
 
-void ABaseItem::Interact()
+void ABaseItem::Interact(AActor* InteractingActor)
 {
 	SelfDestruct();
 }

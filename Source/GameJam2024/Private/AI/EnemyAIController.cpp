@@ -10,10 +10,12 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISense_Hearing.h"
 #include "Willie.h"
-
+#include "Perception/AIPerceptionTypes.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Perception/AISenseConfig_Hearing.h"
+#include "Perception/AIPerceptionSystem.h"
 
 void AEnemyAIController::GetRandomLocation()
 {
