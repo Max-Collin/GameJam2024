@@ -8,6 +8,7 @@
 #include "Logging/LogMacros.h"
 #include "P_PlayerCharacter.generated.h"
 
+class AThrowableItem;
 class USpotLightComponent;
 class UPointLightComponent;
 class USpringArmComponent;
@@ -80,6 +81,8 @@ public:
 	//FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera1; }
+
+	TObjectPtr<AThrowableItem> EquippedThrowable;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -99,6 +102,7 @@ protected:
 	
 
 	void Aim();
+	void Throw();
 
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,

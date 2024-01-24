@@ -17,6 +17,7 @@
 #include "Components/SpotLightComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "ThrowableItem.h"
 
 // Sets default values
 AP_PlayerCharacter::AP_PlayerCharacter()
@@ -149,7 +150,7 @@ void AP_PlayerCharacter::Interact(const FInputActionValue& Value)
 void AP_PlayerCharacter::Aim()
 {
 
-	//if(!EquippedThrowable)return;
+	if(!EquippedThrowable)return;
 	FPredictProjectilePathParams ProjectilePathParams;
 	FPredictProjectilePathResult ProjectilePathResult;
 
@@ -205,6 +206,49 @@ void AP_PlayerCharacter::Aim()
 	//FVector(ForwardVector.X,ForwardVector.Y,ForwardVector.Z=50)
 }
 
+void AP_PlayerCharacter::Throw()
+{
+
+	
+		if(!EquippedThrowable)return;
+		EquippedThrowable->GetMesh()->SetSimulatePhysics(true);
+		EquippedThrowable->GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		EquippedThrowable->Reset_DoOnce_Hit();
+		EquippedThrowable->DetachMeshFromSocket();
+	
+		float PlayerPitch ;
+		FVector LaunchVelocity;
+		if(GetControlRotation().Pitch>=270)
+		{
+			PlayerPitch = (GetControlRotation().Pitch-270)/110;
+			//FVector ForwardVector = GetCapsuleComponent()->GetForwardVector();
+			//LaunchVelocity = ForwardVector* ThrowSpeed *PlayerPitch +10 ;
+		}
+		else
+		{
+			PlayerPitch = (GetControlRotation().Pitch+90)/110;
+		
+	
+		}
+		PlayerPitch = FMath::Clamp(PlayerPitch,0.01,1.2);
+		FVector UnitDirection =UKismetMathLibrary::GetDirectionUnitVector(GetActorLocation(),ThrowStartLocation->GetComponentLocation());
+		FVector ForwardVector = GetCapsuleComponent()->GetForwardVector();
+		LaunchVelocity = UnitDirection* ThrowSpeed ;
+		float PitchvelocityX =  PlayerPitch*2-FMath::Cube(PlayerPitch);
+		LaunchVelocity = FVector(LaunchVelocity.X*PitchvelocityX,LaunchVelocity.Y*PitchvelocityX,FMath::Pow(LaunchVelocity.Z,PlayerPitch));
+	
+		EquippedThrowable->GetMesh()->SetPhysicsLinearVelocity(LaunchVelocity);
+		EquippedThrowable->GetMesh()->SetEnableGravity(true);
+		EquippedThrowable = nullptr;
+	
+	
+
+
+	
+	
+	
+}
+
 void AP_PlayerCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                                    int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult)
 {
@@ -215,7 +259,7 @@ void AP_PlayerCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 		if(Interacting)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Destroy"));
-			ItemToPickup->SelfDestruct();
+			ItemToPickup->Interact(this);
 		}
 	}
 }
@@ -252,6 +296,7 @@ void AP_PlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &AP_PlayerCharacter::Interact);
 
 		EnhancedInputComponent->BindAction(AimAction,ETriggerEvent::Triggered,this,&AP_PlayerCharacter::Aim);
+		EnhancedInputComponent->BindAction(AimAction,ETriggerEvent::Completed,this,&AP_PlayerCharacter::Throw);
 	}
 	else
 	{

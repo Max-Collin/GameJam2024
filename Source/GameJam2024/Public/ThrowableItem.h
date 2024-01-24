@@ -19,6 +19,8 @@ public:
 	AThrowableItem();
 	void DetachMeshFromSocket();
 	void Equip(USceneComponent* InParent,FName InSocketName);
+
+	virtual void Interact(AActor* InteractingActor) override;
 	
 protected:
 	
@@ -39,4 +41,5 @@ private:
 	
 public:
 	FORCEINLINE void Reset_DoOnce_Hit()  { DoOnce_Hit =true;}
+	FORCEINLINE UStaticMeshComponent* GetMesh() const {return ItemMesh;}
 };

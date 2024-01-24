@@ -3,6 +3,8 @@
 
 #include "ThrowableItem.h"
 
+
+#include "P_PlayerCharacter.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Hearing.h"
 
@@ -19,20 +21,32 @@ AThrowableItem::AThrowableItem()
 void AThrowableItem::DetachMeshFromSocket()
 {
 
-FDetachmentTransformRules TransformRules(EDetachmentRule::KeepWorld,true);
+	FDetachmentTransformRules TransformRules(EDetachmentRule::KeepWorld,true);
 	ItemMesh->DetachFromComponent(TransformRules);
 }
 
 void AThrowableItem::Equip(USceneComponent* InParent, FName InSocketName)
 {
 	ItemMesh->SetSimulatePhysics(false);
-	AttachMeshToSocket(InParent, InSocketName);
+	//AttachMeshToSocket(InParent, InSocketName);
 	ItemMesh->SetEnableGravity(false);
 	ItemMesh->SetAllPhysicsLinearVelocity(FVector::ZeroVector);
 	ItemMesh->SetAllPhysicsAngularVelocityInDegrees(FVector::ZeroVector);
 
 	ItemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	
+}
+
+void AThrowableItem::Interact(AActor* InteractingActor)
+{
+	if(AP_PlayerCharacter* Player = Cast<AP_PlayerCharacter>(InteractingActor))
+	{
+		Equip(Player->GetMesh(),"RightHandSocket");
+		Player->EquippedThrowable =this;
+	}
+	
+	
 	
 }
 
