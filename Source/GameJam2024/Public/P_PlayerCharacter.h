@@ -91,13 +91,19 @@ public:
 	TObjectPtr<AThrowableItem> EquippedThrowable;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void ShowInteractMessage();
+	void UsingTorch(bool OnOff);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowHUDCollectedEnoughLootMessage();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowHUDWinMessage();
+
+	UFUNCTION(BlueprintCallable)
+	void ForceLightOff();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float TorchPercentage = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int CollectedLootValue = 0;

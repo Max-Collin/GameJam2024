@@ -74,6 +74,7 @@ AP_PlayerCharacter::AP_PlayerCharacter()
     	ThrowStartLocation->SetupAttachment(FollowCamera1);
 }
 
+
 // Called when the game starts or when spawned
 void AP_PlayerCharacter::BeginPlay()
 {
@@ -130,21 +131,30 @@ void AP_PlayerCharacter::Look(const FInputActionValue& Value)
 
 void AP_PlayerCharacter::Mouse1(const FInputActionValue& Value)
 {
-	
 	if(LightSwitch)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Off"));
-		UGameplayStatics::PlaySound2D(this, FlashLightOff);
-		LightSwitch = false;
-		LightSource1->SetVisibility(false);
+		ForceLightOff();
 	}else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("On"));
-		UGameplayStatics::PlaySound2D(this, FlashLightOn);
-		LightSwitch = true;
-		LightSource1->SetVisibility(true);
+		if(TorchPercentage > 0)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("On"));
+			UGameplayStatics::PlaySound2D(this, FlashLightOn);
+			LightSwitch = true;
+			LightSource1->SetVisibility(true);
+			UsingTorch(true);
+		}
 	}
 	
+}
+
+void AP_PlayerCharacter::ForceLightOff()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Off"));
+	UGameplayStatics::PlaySound2D(this, FlashLightOff);
+	LightSwitch = false;
+	LightSource1->SetVisibility(false);
+	UsingTorch(false);
 }
 
 
