@@ -216,7 +216,7 @@ void ADungeonSpawner::SpawnWalls(bool IsFloorTile, UE::Math::TIntVector3<int> Fl
 			if(!IsFloorTile)
 			{
 				FVector SpawnWallLocation =FVector(SpawnLocation.X+400,SpawnLocation.Y,SpawnLocation.Z);
-				Rotation=FRotator(0.f,90.f,0.f);
+				Rotation=FRotator(0.f,180.f,0.f);
 				
 				FTransform SpawnTransform = FTransform(Rotation,SpawnWallLocation);
 				WallMesh->AddInstance(SpawnTransform);
@@ -226,8 +226,8 @@ void ADungeonSpawner::SpawnWalls(bool IsFloorTile, UE::Math::TIntVector3<int> Fl
 			TestRelativeTileLocation(FloorTile,0,1,IsFloorTile);
 			if(!IsFloorTile)
 			{
-				FVector SpawnWallLocation =FVector(SpawnLocation.X,SpawnLocation.Y+400,SpawnLocation.Z);
-				Rotation=FRotator(0.f,0.f,0.f);
+				FVector SpawnWallLocation =FVector(SpawnLocation.X+400,SpawnLocation.Y+400,SpawnLocation.Z);
+				Rotation=FRotator(0.f,-90.f,0.f);
 				FTransform SpawnTransform = FTransform(Rotation,SpawnWallLocation);
 				WallMesh->AddInstance(SpawnTransform);
 			}
@@ -237,7 +237,7 @@ void ADungeonSpawner::SpawnWalls(bool IsFloorTile, UE::Math::TIntVector3<int> Fl
 			if(!IsFloorTile)
 			{
 				FVector SpawnWallLocation =FVector(SpawnLocation.X,SpawnLocation.Y+400,SpawnLocation.Z);
-				Rotation=FRotator(0.f,-90.f,0.f);
+				Rotation=FRotator(0.f,0.f,0.f);
 				FTransform SpawnTransform = FTransform(Rotation,SpawnWallLocation);
 				WallMesh->AddInstance(SpawnTransform);
 			}
@@ -246,8 +246,8 @@ void ADungeonSpawner::SpawnWalls(bool IsFloorTile, UE::Math::TIntVector3<int> Fl
 			TestRelativeTileLocation(FloorTile,0,-1,IsFloorTile);
 			if(!IsFloorTile)
 			{
-				FVector SpawnWallLocation =FVector(SpawnLocation.X+400,SpawnLocation.Y,SpawnLocation.Z);
-				Rotation=FRotator(0.f,180.f,0.f);
+				FVector SpawnWallLocation =FVector(SpawnLocation.X,SpawnLocation.Y,SpawnLocation.Z);
+				Rotation=FRotator(0.f,90.f,0.f);
 				FTransform SpawnTransform = FTransform(Rotation,SpawnWallLocation);
 				WallMesh->AddInstance(SpawnTransform);
 			}
