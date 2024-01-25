@@ -283,6 +283,13 @@ void AP_PlayerCharacter::Interact(const FInputActionValue& Value)
 						ShowHUDCollectedEnoughLootMessage();
 					}
 				}
+				if(HitableActor->isExit)
+				{
+					if(CollectedLootValue >= TargetLootValue)
+					{
+						ShowHUDWinMessage();
+					}
+				}
 				HitableActor->Interact(this);
 			}
 		}

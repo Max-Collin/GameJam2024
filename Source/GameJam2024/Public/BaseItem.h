@@ -31,6 +31,9 @@ public:
 	bool isPickup;
 
 	UPROPERTY(EditAnywhere)
+	bool isExit;
+
+	UPROPERTY(EditAnywhere)
 	bool isOfValue;
 
 	UPROPERTY(EditAnywhere)
