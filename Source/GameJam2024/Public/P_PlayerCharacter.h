@@ -108,6 +108,12 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* FlashLightOn;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* FlashLightOff;
 	
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);

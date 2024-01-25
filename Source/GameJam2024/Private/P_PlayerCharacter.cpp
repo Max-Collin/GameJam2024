@@ -17,6 +17,7 @@
 #include "Components/SpotLightComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "ThrowableItem.h"
 
 
@@ -133,11 +134,13 @@ void AP_PlayerCharacter::Mouse1(const FInputActionValue& Value)
 	if(LightSwitch)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Off"));
+		UGameplayStatics::PlaySound2D(this, FlashLightOff);
 		LightSwitch = false;
 		LightSource1->SetVisibility(false);
 	}else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("On"));
+		UGameplayStatics::PlaySound2D(this, FlashLightOn);
 		LightSwitch = true;
 		LightSource1->SetVisibility(true);
 	}
