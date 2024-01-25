@@ -92,6 +92,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowInteractMessage();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowHUDCollectedEnoughLootMessage();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CollectedLootValue = 0;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -122,6 +128,8 @@ protected:
 	bool LightSwitch = true;
 	bool Interacting = false;
 	bool inRangeToPickup = false;
+
+	float TargetLootValue = 100;
 	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UChildActorComponent> ThrowStartLocation;

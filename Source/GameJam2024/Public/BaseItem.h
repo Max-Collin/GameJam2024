@@ -30,6 +30,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool isPickup;
 
+	UPROPERTY(EditAnywhere)
+	bool isOfValue;
+
+	UPROPERTY(EditAnywhere)
+	float Value;
+
 	UFUNCTION()
 	virtual void Interact(AActor* InteractingActor);
 	

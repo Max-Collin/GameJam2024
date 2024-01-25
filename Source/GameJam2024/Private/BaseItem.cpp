@@ -45,6 +45,5 @@ void ABaseItem::SelfDestruct()
 	{
 		this->Destroy();
 	}
-	
 }
 

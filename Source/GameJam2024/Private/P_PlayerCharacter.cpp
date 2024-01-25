@@ -275,6 +275,14 @@ void AP_PlayerCharacter::Interact(const FInputActionValue& Value)
 		{
 			if(ABaseItem* HitableActor = Cast<ABaseItem>(HitResult.GetActor()))
 			{
+				if(HitableActor->isOfValue)
+				{
+					CollectedLootValue += HitableActor->Value;
+					if(CollectedLootValue >= TargetLootValue)
+					{
+						ShowHUDCollectedEnoughLootMessage();
+					}
+				}
 				HitableActor->Interact(this);
 			}
 		}
