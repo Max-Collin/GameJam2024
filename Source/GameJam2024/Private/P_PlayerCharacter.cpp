@@ -91,6 +91,8 @@ void AP_PlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	ForceLightOff();
 }
 
 void AP_PlayerCharacter::Move(const FInputActionValue& Value)
