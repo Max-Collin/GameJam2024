@@ -108,14 +108,17 @@ void ADungeonSpawner::BeginPlay()
 		case 1:
 			RoomSize_Min = 8;
 			RoomSize_Max=15;
+			RoomCount = 3;
 			break;
 		case 2:
-			RoomSize_Min = 8;
-            			RoomSize_Max=15;
+			RoomSize_Min = 6;
+			RoomSize_Max=12;
+			RoomCount = 5;
 			break;
 		case 3:
-			RoomSize_Min = 8;
-			RoomSize_Max=15;
+			RoomSize_Min = 4;
+			RoomSize_Max=9;
+			RoomCount = 7;
 			break;
 		default:
 			RoomSize_Min = 8;
