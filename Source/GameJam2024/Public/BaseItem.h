@@ -26,6 +26,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	USphereComponent* CollisionSphere;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* RootScene;
 	
 	UPROPERTY(EditAnywhere)
 	bool isPickup;
