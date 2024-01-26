@@ -13,15 +13,19 @@ AWillie::AWillie()
 
 }
 
-void AWillie::Scare()
+
+
+void AWillie::Scare_Implementation()
 {
 	if(ScareCount<=1)
 	{
-	UE_LOG(LogTemp,Warning,TEXT("Second Booo"));
+		UE_LOG(LogTemp,Warning,TEXT("Second Booo"));
+		
 	}
 	else
 	{
 		ScareCount++;
+		
 	}
 }
 

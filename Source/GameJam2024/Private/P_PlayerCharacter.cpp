@@ -159,6 +159,10 @@ void AP_PlayerCharacter::ForceLightOff()
 	UsingTorch(false);
 }
 
+void AP_PlayerCharacter::GetScared_Implementation()
+{
+}
+
 
 
 void AP_PlayerCharacter::Aim()

@@ -102,6 +102,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ForceLightOff();
 
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	void GetScared();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float TorchPercentage = 1;
 

@@ -22,6 +22,7 @@ public:
 	void NewPatrolTarget();
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<ATargetPoint> CurrentPatrolTarget;
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
     void Scare();
 protected:
 	// Called when the game starts or when spawned
