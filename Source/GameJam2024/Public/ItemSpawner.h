@@ -18,6 +18,7 @@ class GAMEJAM2024_API UItemSpawner : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UItemSpawner();
+	void OnDungeonSpawn();
 
 protected:
 	// Called when the game starts

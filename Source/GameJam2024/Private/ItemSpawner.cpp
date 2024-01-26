@@ -19,13 +19,9 @@ UItemSpawner::UItemSpawner()
 	// ...
 }
 
-
-// Called when the game starts
-void UItemSpawner::BeginPlay()
+void UItemSpawner::OnDungeonSpawn()
 {
-	Super::BeginPlay();
-	
-	
+
 
 	DungeonSpawner = Cast<ADungeonSpawner>(GetOwner());
 	Stream = DungeonSpawner->GetStream();
@@ -36,11 +32,22 @@ void UItemSpawner::BeginPlay()
 	}	
 	SpawnEndDoor();
 	SpawnPatrolPoints();
-	Spawn();
 	SpawnWillie();
+	Spawn();
+	
+}
+
+
+// Called when the game starts
+void UItemSpawner::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	
 	// ...
 	
 }
+
 
 
 void UItemSpawner::Spawn()

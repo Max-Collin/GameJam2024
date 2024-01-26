@@ -75,7 +75,7 @@ protected:
 	float Scale;
 
 	UPROPERTY(EditAnywhere , Category = "Editor Settings")
-	bool NewSeed = false;
+	bool NewSeed = true;
 	
 	UPROPERTY(EditAnywhere)
 	FRandomStream Stream;

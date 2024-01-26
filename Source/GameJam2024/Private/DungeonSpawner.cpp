@@ -36,7 +36,7 @@ void ADungeonSpawner::OnConstruction(const FTransform& Transform)
 {
 	
 	Super::OnConstruction(Transform);
-	//clear previous values
+	/*//clear previous values
 	FloorMesh->ClearInstances();
 	WallMesh->ClearInstances();
 	RoofMesh->ClearInstances();
@@ -60,7 +60,7 @@ void ADungeonSpawner::OnConstruction(const FTransform& Transform)
 	
 	
 	Stream.Initialize(Seed);
-	GenerateMap();
+	GenerateMap();*/
 }
 
 // Called when the game starts or when spawned
@@ -78,7 +78,30 @@ void ADungeonSpawner::BeginPlay()
 		
 	}
 	*/
-
+    FloorMesh->ClearInstances();
+	WallMesh->ClearInstances();
+	RoofMesh->ClearInstances();
+	FloorTiles.Empty();
+	CorridorTiles.Empty();
+	RoomOnlyTiles.Empty();
+	Rooms.Empty();
+	// sets the starting room location 
+	PreviousLocation = FIntVector(0,0,0);
+	//sets a random seed 
+	Seed = FMath::Rand() % 999999999;
+	if(NewSeed)
+	{
+		
+		
+			NewSeed = false;
+			Stream.Initialize(Seed);
+		
+		
+	}
+	
+	
+	Stream.Initialize(Seed);
+	GenerateMap();
 	
 
 }
@@ -112,6 +135,7 @@ void ADungeonSpawner::GenerateMap()
 		
 	}
 	SpawnTiles();
+	SpawnerComponent->OnDungeonSpawn();
 }
 
 void ADungeonSpawner::Room_GenerateFloor(FIntVector RootLocation  )
