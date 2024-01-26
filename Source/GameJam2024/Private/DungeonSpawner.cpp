@@ -3,6 +3,7 @@
 
 #include "DungeonSpawner.h"
 
+#include "GGGGameInstance.h"
 #include "ItemSpawner.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Math/RandomStream.h"
@@ -99,7 +100,30 @@ void ADungeonSpawner::BeginPlay()
 		
 	}
 	
-	
+	if(UGGGGameInstance* GameInstance = Cast<UGGGGameInstance>(GetGameInstance()))
+	{
+		int32 Difficulty =GameInstance->Difficulty;
+		switch (Difficulty)
+		{
+		case 1:
+			RoomSize_Min = 8;
+			RoomSize_Max=15;
+			break;
+		case 2:
+			RoomSize_Min = 8;
+            			RoomSize_Max=15;
+			break;
+		case 3:
+			RoomSize_Min = 8;
+			RoomSize_Max=15;
+			break;
+		default:
+			RoomSize_Min = 8;
+			RoomSize_Max=15;
+			break;
+		}
+		
+	}
 	Stream.Initialize(Seed);
 	GenerateMap();
 	

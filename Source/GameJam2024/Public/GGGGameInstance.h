@@ -14,4 +14,7 @@ class GAMEJAM2024_API UGGGGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
+	public:
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	 int32 Difficulty= 1;
 };
