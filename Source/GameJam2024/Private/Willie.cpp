@@ -13,6 +13,18 @@ AWillie::AWillie()
 
 }
 
+void AWillie::Scare()
+{
+	if(ScareCount<=1)
+	{
+	UE_LOG(LogTemp,Warning,TEXT("Second Booo"));
+	}
+	else
+	{
+		ScareCount++;
+	}
+}
+
 // Called when the game starts or when spawned
 void AWillie::BeginPlay()
 {
