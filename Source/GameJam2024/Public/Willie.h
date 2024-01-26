@@ -22,7 +22,7 @@ public:
 	void NewPatrolTarget();
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<ATargetPoint> CurrentPatrolTarget;
-
+    void Scare();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -33,5 +33,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private: 
+	int32 ScareCount =0;
 
 };
